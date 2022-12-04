@@ -1,0 +1,472 @@
+@{
+  ViewData["Title"] = "Edição do evento";
+}
+<script>
+  var eventId = @ViewBag.EventId ; 
+</script>
+<div class="flex flex-col h-screen w-full px-24 py-16">
+  <div class="flex flex-col h-full w-full px-24">
+    <div class="flex flex-col h-full w-full ">
+      <div class="flex justify-center mb-8">
+        <h4 class="text-xl font-bold">Edição do evento</h4>
+      </div>
+      @* Title & image *@
+      <div class="flex">
+        <div class="mb-6 w-full px-4">
+          <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Título </label>
+          <input type="text" id="title"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+            placeholder="Digite o título do evento" name="Title" required>
+          <small class="text-gray-500">
+            Digite no mínimo 3 caracteres.
+          </small>
+        </div>
+
+      </div>
+      @* DateTime *@
+      <div class="flex">
+        <div class="mb-6 w-full px-4 w-1/4">
+          <label for="data_hora" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dia e local
+          </label>
+          <input type="datetime-local" id="data_hora"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+            name="data" required>
+          <small class="text-gray-500">
+            Defina o dia e local do evento
+          </small>
+        </div>
+        <div class="mb-6 px-4 w-1/4">
+          <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor</label>
+          <input type="text" id="price"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+            placeholder="R$ 00,00" name="price" required>
+
+        </div>
+        <div class="mb-6 w-full px-4 flex">
+          <div class="flex flex-col">
+            <label for="imagem" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Imagem</label>
+            <input type="file" id="imagem"
+              class="file-input file-input-bordered file-input-md w-full rounded-tr-none rounded-br-none" />
+            <small class="text-gray-500">
+              Escolha apenas arquivos no formato: PNG, JPG & JPEG.
+            </small>
+          </div>
+          <div class="flex flex-col justify-center">
+            <label for="view_photo" class="btn rounded-tl-none rounded-bl-none">Ver Foto</label>
+
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col px-5 mb-6">
+        <label for="categories" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+          Selecione as categorias do evento
+        </label>
+        <div id="categorias"
+          class="flex w-full rounded-lg bg-gray-50 border h-24 justify-center gap-5 flex-wrap p-3 overflow-y-scroll">
+        </div>
+      </div>
+
+      @* Event Type *@
+      <div class="flex pb-1 align-center gap-5 px-5">
+        <div class="flex w-full border-b gap-5 pb-1">
+          Local do evento:
+          <div class="flex gap-3 m-0 p-0 self-end">
+            <small class="font-bold">On-line</small>
+            <input type="checkbox" class="toggle toggle-sm" id="local_type" checked="">
+            <small class="font-bold">Presencial</small>
+          </div>
+        </div>
+      </div>
+      @* Address *@
+      <div class="flex flex-col w-full" id="fullAddress">
+        <div class="flex">
+          <div class="mb-2 w-full px-4 max-w-xs">
+            <label for="cep" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">CEP </label>
+            <input type="text" id="cep"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+              placeholder="Digite o cep" name="cep" required>
+          </div>
+          <div class="mb-2 w-full px-4 ">
+            <label for="logradouro" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Logradouro
+            </label>
+            <input type="text" id="logradouro"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+              placeholder="Digite a rua do evento" name="logradouro" required>
+          </div>
+          <div class="mb-2 w-full px-4 ">
+            <label for="bairro" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Bairro
+            </label>
+            <input type="text" id="bairro"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+              placeholder="Digite a rua do evento" name="bairro" required>
+          </div>
+          <div class="mb-2 w-full px-4 w-96">
+            <label for="nr_local" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nr Local
+            </label>
+            <input type="text" id="nr_local"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+              placeholder="Digite o nr do local" name="nr_local" required>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="mb-6 w-full px-4 w-96">
+            <label for="state" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Estado
+            </label>
+            <select id="estado" class="select select-bordered w-full max-w-xs">
+              <option disabled selected>Selecione um estado</option>
+
+            </select>
+          </div>
+          <div class="mb-6 w-full px-4 w-96">
+            <label for="state" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Cidade
+            </label>
+            <select class="select select-bordered  w-full max-w-xs" id="cidade">
+            </select>
+          </div>
+          <div class="mb-2 w-full px-4 w-96">
+            <label for="complemento" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Complemento
+            </label>
+            <input type="text" id="complemento"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+              placeholder="Digite o complemento" name="complemento" required maxlength="250">
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col w-full" id="linkEvent" style="display: none;">
+        <div class="mb-6 w-full px-4">
+          <label for="link" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Link</label>
+          <input type="text" id="link"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+            placeholder="Coloque o link do evento" name="link" required>
+          <small class="text-gray-500">
+            Cole o link do evento
+          </small>
+        </div>
+      </div>
+      @* Event link *@
+      @* Event Price *@
+
+      @* Description *@
+      <div class="mb-6 w-full px-4">
+        <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descrição </label>
+        <textarea id="descricao" class="textarea textarea-bordered w-full resize-none"
+          placeholder="Digite as informações sobre o evento"></textarea>
+
+        <small class="text-gray-500">
+          Digite no máximo 1000 caracteres.
+        </small>
+      </div>
+      @* Buttons *@
+      <div class="flex justify-center gap-3">
+        <a href="/profile/event" class="btn btn-error gap-3"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
+        <button id="bt" class="btn btn-success gap-3"><i class="fa-solid fa-floppy-disk"></i> Cadastrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="#my-modal-2" class="btn invisible">open modal</a>
+<div class="modal" id="my-modal-2">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Evento cadastrado com sucesso!</h3>
+    <p class="py-4">Você cadastrou um evento!</p>
+    <div class="modal-action">
+      <a href="/profile/event" class="btn">Fechar</a>
+    </div>
+  </div>
+</div>
+
+<input type="checkbox" id="view_photo" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box relative">
+    <label for="view_photo" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <h3 class="text-lg font-bold">Foto atual</h3>
+    <img src="" id="photo_view" class="rounded-sm">
+  </div>
+</div>
+
+@section Scripts {
+<script>
+  var title = $("#title");
+  var price = $("#price");
+  var cep = $("#cep");
+  var logradouro = $("#logradouro");
+  var bairro = $("#bairro");
+  var nr_local = $("#nr_local");
+  var estado = $("#estado");
+  var cidade = $("#cidade");
+  var complemento = $("#complemento");
+  var descricao = $("#descricao");
+  var data_hora = $("#data_hora");
+  const file = $("#imagem");
+  const bt = $("#bt");
+  var link = $("#link");
+  let img64 = "";
+  var category_to_add = [];
+  $('#price').mask('000.000.000.000.000,00', { reverse: true });
+  $('#cep').mask('00000-000');
+
+  file.on('input', function (ev) {
+
+    const whiteList = ["image/jpg", "image/png", "image/jpeg"];
+
+    if (ev.target.files.length) {
+      const firstFile = ev.target.files[0];
+      console.log(firstFile.type);
+      if (whiteList.indexOf(firstFile.type) == -1) {
+        ev.target.value = "";
+        return addInvalidField(file);
+      }
+
+      file.removeClass("input-error");
+      var reader = new FileReader();
+      var baseString;
+      reader.onloadend = function () {
+        img64 = reader.result;
+      };
+      reader.readAsDataURL(firstFile);
+    }
+  });
+
+  $(document).ready(() => {
+
+    getCategories();
+    getStates();
+    $.ajax({
+      url: "/event/ReadById",
+      method: "POST",
+      data: {
+        id: eventId
+      },
+      success: data => {
+        if (data.data.events.length == 0)
+          return;
+
+        const event = data.data.events[0];
+        const price = event.prices[0];
+        const address = event?.address;
+        const isOnline = event.online == 1;
+
+        img64 = event.photo;
+
+        $("#photo_view").attr("src", img64);
+
+        category_to_add = event.categories.map(c => {
+          $("#category_" + c.id).click();
+          return c.id;
+        });
+
+
+        title.val(event.title);
+        data_hora.val(event.dateTime);
+        $('#price').val(price.value);
+        descricao.val(event.description);
+        link.val(event.link);
+
+        cep.val(address.cep);
+        logradouro.val(address.logradouro);
+        bairro.val(address.bairro);
+        nr_local.val(address.nrLocal);
+        complemento.val(address.complemento);
+
+        if (isOnline) {
+          $("#local_type").click();
+        } else {
+
+          estado.val(address.state.id);
+          getCities(address.state.id, address.idCity);
+        }
+      }
+    })
+  });
+
+  $("#bt").click(() => {
+    const invalidForm = validateForm();
+    if (invalidForm)
+      return;
+
+    salvarEvento();
+  });
+
+  $("#estado").change(() => getCities($("#estado").val()));
+
+  function addCategory(category) {
+    $("#categorias").removeClass("border-red-500");
+    const id = $(category).data("dbid");
+
+    if (category_to_add.indexOf(id) == -1) {
+      $(category).removeClass("badge-outline");
+      category_to_add.push(id);
+    } else {
+      $(category).addClass("badge-outline");
+      category_to_add = category_to_add.filter(a => a !== id);
+    }
+  }
+
+  function getCategories() {
+    let items = "";
+    $.ajax({
+      url: "/category",
+      success: (data) => {
+        data.data.categories.map(category => {
+          items += `<div class="badge badge-primary badge-outline cursor-pointer" id="category_${category.id}" data-dbid="${category.id}" onclick="addCategory(this)">${category.name}</div>`;
+        });
+
+        $("#categorias").html(items);
+      }
+    });
+  }
+
+  function getStates() {
+    let items = "";
+    $.ajax({
+      url: "/location/states",
+      success: (data) => {
+        data.data.states.map((state, i) => {
+          items += `<option value="${state.id}">${state.nome}</option>`;
+
+          if (i == 1) {
+            getCities(state.id);
+          }
+        });
+
+        $("#estado").html(items);
+      }
+    });
+  }
+
+  function getCities(stateId, cityId = null) {
+    let items = "";
+    $.ajax({
+      url: `/location/Cities/${stateId}`,
+      data: {
+        idState: stateId
+      },
+      success: (data) => {
+        data.data.cities.map(city => {
+          items += `<option value="${city.id}" ${cityId == city.id ? 'selected' : ''}>${city.nome}</option>`;
+        });
+
+        $("#cidade").html(items);
+      }
+    });
+  }
+
+  function validateForm() {
+    var hasFieldInvalid = false;
+
+    if (title.val().trim().length < 3) {
+      hasFieldInvalid = true;
+      addInvalidField(title);
+    }
+
+
+    if (img64 == "") {
+      hasFieldInvalid = true;
+      addInvalidField(file);
+    }
+    if (data_hora.val().trim() == "") {
+      hasFieldInvalid = true;
+      addInvalidField(data_hora);
+    }
+
+    if (category_to_add.length == 0) {
+      hasFieldInvalid = true;
+      addInvalidField($("#categorias"))
+    }
+
+
+    if ($("#local_type").is(":checked")) {
+
+      if (cep.val().replace("-", "").length != 8) {
+        hasFieldInvalid = true;
+        addInvalidField(cep)
+      }
+
+      if (logradouro.val().length < 3) {
+        hasFieldInvalid = true;
+        addInvalidField(logradouro)
+      }
+
+      if (bairro.val().trim().length < 3) {
+        hasFieldInvalid = true;
+        addInvalidField(bairro);
+      }
+
+      if (nr_local.val().length == 0) {
+        hasFieldInvalid = true;
+        addInvalidField(nr_local)
+      }
+    }
+
+    if (descricao.val().length < 3) {
+      hasFieldInvalid = true;
+      addInvalidField(descricao)
+    }
+
+    return hasFieldInvalid;
+  }
+
+  function salvarEvento() {
+    var title = $("#title");
+    var price = $("#price");
+    var online = $("#local_type").is(":checked") ? 0 : 1;
+    var cep = $("#cep");
+    var logradouro = $("#logradouro");
+    var bairro = $("#bairro");
+    var nr_local = $("#nr_local");
+    var estado = $("#estado");
+    var cidade = $("#cidade");
+    var complemento = $("#complemento");
+    var descricao = $("#descricao");
+    var link = $("#link");
+
+    bt.spinner();
+
+    $.ajax({
+      url: "/event/SaveUpdate",
+      complete: () => bt.spinner(),
+      data: {
+        id: eventId,
+        user_id: UUID,
+        title: title.val().trim(),
+        price: price.val() == "" ? 0 : price.val(),
+        online: online,
+        cep: cep.val().trim().replace("-", ""),
+        logradouro: logradouro.val().trim(),
+        bairro: bairro.val().trim(),
+        nr_local: nr_local.val().trim(),
+        estado: estado.val(),
+        cidade: cidade.val(),
+        complemento: complemento.val(),
+        descricao: descricao.val(),
+        link: link.val(),
+        img: img64,
+        category_to_add: category_to_add.join(";"),
+        data_hora: $("#data_hora").val().replace("T", " ") + ":00"
+      },
+      success: (data) => {
+        $.confirm({
+          title: "Evento atualizado com sucesso!",
+          onClose: () => {
+            // window.location.href = "/profile/event";
+          },
+          content: "",
+          buttons: {
+            fechar: {
+              text: "fechar",
+              action: () => {
+                window.location.href = "/profile/event";
+              }
+            }
+          }
+        });
+      }
+    });
+  }
+
+  $("#local_type").on("change", () => {
+    let a = $("#local_type").is(":checked");
+    a ? $("#linkEvent").fadeOut(() => $("#fullAddress").fadeIn()) : $("#fullAddress").fadeOut(() => $("#linkEvent").fadeIn());
+  });
+</script>
+}

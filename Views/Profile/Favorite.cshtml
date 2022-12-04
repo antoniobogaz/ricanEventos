@@ -1,0 +1,37 @@
+@{
+  ViewData["Title"] = "Seus dados";
+}
+
+
+<div class="flex h-screen w-full py-3 md:py-16 px-16">
+  <div class="flex flex-col w-full md:w-1/3 h-full align-center border-r gap-3 px-8">
+    <div class="flex flex-col h-full">
+      <a href="/profile" class="px-3  rounded-lg py-3">
+        <i class="fa-solid fa-gear"></i> Meus dados
+      </a>
+      <a href="/profile/favorite" class="px-3  bg-gray-100 rounded-lg py-3">
+        <i class="fas fa-heart self-center"></i> Favoritos
+      </a>
+      <a href="/profile/event" class="px-3  rounded-lg py-3">
+        <i class="fa-solid fa-right-from-bracket"></i> Meus eventos
+      </a>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <a href="/login/logout" class="btn btn-error gap-2 font-bold text-white shadow-lg shadow-red-300">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Sair
+      </a>
+    </div>
+  </div>
+  <div class="flex flex-col w-full px-16">
+    <div class="flex">
+      <h2 class="text-2xl text-gray-800 font-bold">
+        Eventos favoritos
+      </h2>
+    </div>
+    <div class="flex flex-col h-full overflow-auto pt-8">
+
+    </div>
+  </div>
+</div>

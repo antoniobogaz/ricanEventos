@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "RicanEventos - Página inicial";
+}
+
+@section navbar {
+
+<partial name="_NavBar" />
+}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat+Subrayada&display=swap" rel="stylesheet">
+<div class="flex w-full px-24 py-24">
+    <div
+        class="text-center drop-shadow-xl flex flex-col justify-center rounded-lg w-full bg-gray-900 h-36 bg-bottom shadow-lg shadow-gray-500">
+        <h1 class="align text-5xl text-emerald-300 drop-shadow-lg drop-shadow-green"
+            style="font-family: 'Montserrat Subrayada', sans-serif;">
+            Se solte! <span class="text-white"> É a hora de viver.</span>
+        </h1>
+    </div>
+</div>
+
+<div class="flex flex-col px-24 py-8 w-full">
+    <div class="flex justify-start mb-8">
+        <h4 class="font-bold  text-xl">
+            Últimos eventos publicados
+        </h4>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8" id="cards">
+    </div>
+</div>
+
+
+@section Scripts {
+<script>
+    function loadEvents() {
+        $.ajax({
+            url: "/event/read",
+            method: 'POST',
+            success: data => {
+                let items = "";
+
+                data.data.events.map(event => {
+                    const option = {
+                        year: 'numeric',
+                        month: ('long' || 'short' || 'numeric'),
+                        weekday: ('long' || 'short'),
+                        day: 'numeric'
+                    }
+                    const locale = 'pt-br'
+                    const data = new Date("2022-11-29T04:50:00").toLocaleDateString(locale, option)
+                    let categorie = "";
+
+                    event.categories.map(category => categorie += `<div class="badge badge-outline border-gray-400 text-gray-500">${category.name}</div>`);
+
+                    items += `
+           <div class="card glass  hover:shadow-lg duration-75 ease-in-out">
+                <figure>
+                    <img src="${event.photo}" alt="car!" />
+                </figure>
+
+                <div class="card-body p-2 text-gray-800 relative">
+                    <span class="absolute -top-4 right-3 self-center">
+                        <div class="h-8 w-8 flex flex-col justify-center border bg-white rounded-full cursor-pointer ">
+                            <i class="fas fa-heart self-center text-gray-500"></i>
+                        </div>
+                    </span>
+                    <h2 class="card-title text-gray-600">${event.title}</h2>
+                    <small class="text-emerald-400 font-bold">${data}</small>
+                    <p class="text-gray-500">${event.description.slice(0, 60) + (event.description.length > 0 ? "..." : "")} </p>
+                    <div class="flex  gap-2 text-gray-500 mb-2">
+                        <i class="fas fa-map-marked-alt"></i><small class="text-gray-500"> ${event.online ? "Online" : ""}</small>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        ${categorie}
+                    </div>
+                </div>
+            </div>
+        `;
+                });
+
+                $("#cards").html(items);
+            }
+        });
+    }
+
+    loadEvents();
+
+</script>
+}

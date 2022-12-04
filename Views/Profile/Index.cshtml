@@ -1,0 +1,164 @@
+@{
+  ViewData["Title"] = "Seus dados";
+}
+
+<div class="flex h-screen w-full py-3 md:py-16 px-16">
+  <div class="flex flex-col w-full md:w-1/3 h-full align-center border-r gap-3 px-8">
+    <div class="flex flex-col h-full">
+      <a href="/profile" class="px-3 bg-gray-100 rounded-lg py-3">
+        <i class="fa-solid fa-gear"></i> Meus dados
+      </a>
+      <a href="/profile/favorite" class="px-3 rounded-lg py-3">
+        <i class="fas fa-heart self-center"></i> Favoritos
+      </a>
+      <a href="/profile/event" class="px-3  rounded-lg py-3">
+        <i class="fa-solid fa-right-from-bracket"></i> Meus eventos
+      </a>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <a href="/login/logout" class="btn btn-error gap-2 font-bold text-white shadow-lg shadow-red-300">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Sair
+      </a>
+    </div>
+  </div>
+  <div class="flex flex-col w-full px-16">
+    <div class="flex">
+      <h2 class="text-2xl text-gray-800 font-bold">
+        Seus dados
+      </h2>
+    </div>
+    <div class="flex flex-col h-full overflow-auto pt-8">
+      <div class="w-full px-8">
+        <div style="display:none;" id="msgErro"
+          class="border p-2 rounded-lg font-bold border-red-500 text-center mb-2 text-red-500">
+          Este e-mail já está sendo utilizado, tente outro.
+        </div>
+        <div style="display:none;" id="msgSuccess"
+          class="border p-2 rounded-lg font-bold border-green-500 text-center mb-2 text-green-500">
+          Dados atualizados com sucesso!
+        </div>
+      </div>
+      <div class="flex w-full ">
+        <form action="POST" id="updateForm" class="w-full flex flex-col">
+          <div class="w-full grid grid-cols-1 md:grid-cols-2">
+            <div class="mb-6 w-full px-4">
+              <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome</label>
+              <input type="text" id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+                placeholder="Digite seu nome" name="Name" required>
+              <small class="text-gray-500">
+                Digite no mínimo 3 caracteres.
+              </small>
+            </div>
+            <div class="mb-6 w-full px-4">
+              <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">E-mail</label>
+              <input type="email" name="Email" id="email"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+                placeholder="Digite seu e-mail" required>
+              <small class="text-gray-500">
+                Digite um e-mail válido.
+              </small>
+            </div>
+          </div>
+          <div class="mb-6 px-4">
+            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Senha</label>
+            <input type="password" id="password" name="Password"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-400 focus:border-green-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-400 dark:focus:border-green-400"
+              placeholder="Digite a sua senha" required>
+            <small class="text-gray-500">
+              Digite no mínimo 3 caracteres.
+            </small>
+          </div>
+
+          <div class="flex px-4 w-full">
+            <div class="flex justify-center py-3 w-full">
+              <button id="bt" class="btn btn-warning gap-2"> <i class="fa-solid fa-floppy-disk"></i>
+                Atualizar
+                os
+                dados</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<script>
+  const email = $("#email");
+  const name = $("#name");
+  const password = $("#password");
+  const form = $("#updateForm");
+  const btn = $("#bt");
+
+  $(document).ready(async () => {
+    const user = await getUserInformation();
+
+    email.val(user.email);
+    name.val(user.name);
+  });
+
+  form.on('submit', submitForm);
+
+  $('input').on('focus', (input) => {
+    $(input).removeClass('border-red-500').addClass('border-gray-300');
+    $("#msgErro").fadeOut();
+  });
+
+  function submitForm(event) {
+    event.preventDefault();
+
+    let invalidField = false;
+
+
+    if (!isEmailValid(email.val().trim())) {
+      invalidField = true;
+      addInvalidField(email);
+    }
+
+    if (name.val().trim().length < 3) {
+      invalidField = true;
+      addInvalidField(name);
+    }
+
+    if (password.val().trim().length < 3) {
+      invalidField = true;
+      addInvalidField(password);
+    }
+
+    if (!invalidField) {
+      updateForm($(this).serialize());
+    }
+  }
+
+  function updateForm(data) {
+    btn.spinner();
+    $("#msgErro, #msgSuccess").fadeOut();
+    $.ajax({
+      url: "/user/update",
+      data: {
+        "Id": UUID,
+        "Name": name.val().trim(),
+        "Email": email.val().trim().toLowerCase(),
+        "Password": password.val().trim()
+      },
+      complete: () => btn.spinner(),
+      success: (data) => {
+
+        if (data.success) {
+          $("#msgSuccess").fadeIn();
+
+          setTimeout(() => $("#msgSuccess").fadeOut(), 2999);
+        }
+        else {
+          $("#msgErro").fadeIn();
+        }
+      }
+    })
+  }
+</script>
+}

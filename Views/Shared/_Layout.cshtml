@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ricanEventos</title>
+    @* <link rel="stylesheet" href="~/lib/flowbite/flowbite.css" /> *@
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.42.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+
+    <style>
+        .jconfirm-holder {
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        .jconfirm-holder>.jc-bs3-container {
+            max-width: 350px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/mask/jquery.mask.min.js"></script>
+    <script src="~/lib/flowbite/flowbite.js"></script>
+    <script src="~/js/validation.js"></script>
+    @RenderSection("navbar", required:false)
+    @RenderBody()
+
+
+    <script>
+        const UUID = '@Context.Session.GetInt32("UserId")';
+        var userInformation = {};
+
+        function getUserInformation() {
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "/user",
+                    data: {
+                        "Id": UUID
+                    },
+                    success: (data) => {
+                        userInformation = a = data.data.users[0];
+                        resolve(userInformation);
+                    }
+                });
+            });
+        }
+    </script>
+    <script>
+
+        jQuery.fn.spinner = function (options = {}) {
+
+            if (!this.length)
+                return undefined;
+
+            if (typeof options == 'boolean')
+                options = {
+                    submit: options
+                };
+
+            let _options = {
+                submit: options.submit,
+                spinnerSize: options.spinnerSize || '1rem',
+                selector: options.selector || null,
+            };
+
+            this.each(function () {
+                if (!$(this).data('tt-submete') && _options.submit !== false) {
+                    const width = $(this).width();
+                    const height = $(this).height();
+
+                    const spinner_size = `${Math.min(width * 0.9, height * 0.9)}px`
+
+                    const spinner_container = $(`<div class="animate-spin" style="width: ${spinner_size}; height: ${spinner_size};"><div></div></div>`);
+                    const spinner = spinner_container.find('div');
+
+                    spinner_container.css({
+                        width: spinner_size,
+                        height: spinner_size,
+                        '-webkit-text-size-adjust': '100%',
+                        'white-space': 'nowrap',
+                        'text-align': 'center',
+                        'user-select': 'none',
+                        '-webkit-tap-highlight-color': 'transparent',
+                        'font-weight': '500',
+                        'margin': 'auto auto',
+                        'padding': '0',
+                        'box-sizing': 'border-box',
+                        'display': 'flex'
+                    });
+
+                    spinner.css({
+                        '-webkit-text-size-adjust': '100%',
+                        'font-family': 'inherit',
+                        'white-space': 'nowrap',
+                        'text-align': 'center',
+                        'user-select': 'none',
+                        '-webkit-tap-highlight-color': 'transparent',
+                        'font-weight': '500',
+                        'margin': '0',
+                        'padding': '0',
+                        'box-sizing': 'border-box',
+                        'display': 'inline-block',
+                        'vertical-align': '-.125em',
+                        'border': '.4em solid currentColor',
+                        'border-right-color': 'transparent',
+                        'border-radius': '50%',
+                        'animation': '.75s linear infinite spinner-border',
+                        'border-width': '.1em',
+                        'width': '100%',
+                        'height': '100%'
+                    });
+
+                    $(this).data('tt-submete', $(this).html());
+                    $(this).attr('disabled', true);
+                    $(this).width(width);
+                    $(this).height(height);
+                    $(this).html(spinner_container);
+                    $(this).css('pointer-events', 'none');
+                }
+
+                // Encerra Spinner
+                else if ($(this).data('tt-submete') && _options.submit !== true) {
+                    $(this).html($(this).data('tt-submete'));
+                    $(this).css('width', '');
+                    $(this).css('height', '');
+                    $(this).css('pointer-events', '');
+                    $(this).attr('disabled', false);
+                    $(this).removeData('tt-submete');
+                }
+            });
+
+            if (_options.selector) {
+                $(_options.selector).prop('disabled', _options.submit);
+                $(_options.selector).each(function () {
+                    if ($(this).hasClass('selectpicker'))
+                        $(this).selectpicker('refresh');
+                });
+            }
+
+            return this;
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
